@@ -67,7 +67,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route element={<PrivateRoutes />}>
+          
             <Route path="/" element={<Rounds />} />
             <Route path="/round1" element={<Round1 />} />
             <Route path="/round2" element={<Round2 />} />
@@ -75,7 +75,7 @@ function App() {
             <Route path="/round4" element={<Round4 />} />
             <Route path="/round5" element={<Round5 />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-          </Route>
+         
         </Routes>
       </AuthProvider>
     </Router>
