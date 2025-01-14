@@ -1,19 +1,16 @@
 import { useContext, useState, useEffect, createContext } from "react";
-import ReactLoading from 'react-loading';
-import { account } from "../appwriteConfig";
-import {createBrowserHistory} from "history";
-
-
+import ReactLoading from "react-loading";
+import { account } from "../utils/Config";
+import { createBrowserHistory } from "history";
 
 export const ErrorContext = createContext();
 const AuthContext = createContext();
-const history =  createBrowserHistory();
+const history = createBrowserHistory();
 
 export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setuser] = useState(false);
 
-  
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -31,13 +28,12 @@ export const AuthProvider = ({ children }) => {
       let accountDetails = await account.get();
       console.log("accountDetails: ", accountDetails);
       setuser(accountDetails);
-      //   console.log(response);
       setLoading(false);
     } catch (error) {
-      console.log(error.message);  // alert the user
+      console.log(error.message); // alert the user
       setErrorMessage(error.message);
       history.push("/login"); // redirect to login page
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -68,16 +64,27 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={contextData}>
-      <ErrorContext.Provider value = {errorMessage}>
+      <ErrorContext.Provider value={errorMessage}>
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-              <ReactLoading type={"spin"} color={"#FFD700"} height={'10%'} width={'10%'} />
-        </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+            }}
+          >
+            <ReactLoading
+              type={"spin"}
+              color={"#ed8936"}
+              height={"10%"}
+              width={"10%"}
+            />
+          </div>
         ) : (
           children
         )}
       </ErrorContext.Provider>
-
     </AuthContext.Provider>
   );
 };
@@ -86,8 +93,8 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export const useError = () =>{
+export const useError = () => {
   return useContext(ErrorContext);
-}
+};
 
 export default AuthContext;

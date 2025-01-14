@@ -1,21 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import img1 from "../assets/hero.png";
 import { useNavigate } from "react-router-dom";
-import { useAuth, useError } from "../utils/AuthContext";
+import { useAuth, useError } from "../context/AuthContext";
 import chz from "../assets/chz.jpeg";
-// import { emailContext } from "../utils/AuthContext";
 
-// const loginForm = useRef(null);
-
-// const handleSubmit = (e) => {
-//   e.preventDefault();
-//   const email = loginForm.current.email.value;
-//   const password = loginForm.current.password.value;
-
-//   const userInfo = {email, password}
-
-//   loginUser(userInfo)
-// }
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,7 +10,6 @@ const Login = () => {
   const [emailColor, setEmailColor] = useState("");
   const { user, loginUser } = useAuth();
 
-  // console.log(emailError);
 
   const loginForm = useRef(null);
 
@@ -33,6 +19,7 @@ const Login = () => {
     }
   }, []);
 
+  
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
