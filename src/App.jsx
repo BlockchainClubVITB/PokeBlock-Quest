@@ -1,17 +1,8 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import {
-  Leaderboard,
-  Login,
-  Rounds,
-  Round1,
-  Round2,
-  Round3,
-  Round4,
-  Round5,
-} from "./components/index";
+import { Login, Rounds, Round } from "./components/index";
 import PrivateRoutes from "./utils/PrivateRoutes";
-import { AuthProvider } from "./utils/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   useEffect(() => {
@@ -74,12 +65,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Rounds />} />
-            <Route path="/round1" element={<Round1 />} />
-            <Route path="/round2" element={<Round2 />} />
-            <Route path="/round3" element={<Round3 />} />
-            <Route path="/round4" element={<Round4 />} />
-            <Route path="/round5" element={<Round5 />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/round/:id" element={<Round />} />
           </Route>
         </Routes>
       </AuthProvider>
