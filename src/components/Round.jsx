@@ -1,67 +1,80 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { database, uniqueId } from "../utils/Config"; 
+import { database, uniqueId } from "../utils/Config";
 import RoundsData from "./RoundsData";
+import { useAuth } from "../context/AuthContext"; // Correctly importing the custom hook
 
 function Round() {
   const [currentRound, setCurrentRound] = useState(null);
   const { id } = useParams();
+  const { user } = useAuth(); // Use the custom hook to fetch user details
+  const [flag, setFlag] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  const DATABASE_ID = "6749aaef0034b73295d6";
+  const COLLECTION_ID = "679656b300020ec3e00b";
 
   useEffect(() => {
-    if (!id) {
-      return;
-    }
+    if (!id) return;
     const rounds = RoundsData();
     const round = rounds.find((round) => round.id === parseInt(id));
     setCurrentRound(round);
   }, [id]);
 
-  const [flag, setFlag] = useState("");
-  const [error, setError] = useState(null);
-  const [score, setScore] = useState(0);
-
-  const DATABASE_ID = import.meta.env.VITE_APP_APPWRITE_DATABASE_ID;
-  const COLLECTION_ID = import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID;
-
   const handleFlagSubmit = async (e) => {
     e.preventDefault();
-
-  //   try {
-  //     if (flag === currentRound.flag) {
-  //       setScore(score + currentRound.points);
-
-  //       const documentData = {
-  //         question: `What is the flag for ${currentRound.name} Challenge?`,
-  //         answer: flag,
-  //         points: score + currentRound.points,
-  //       };
-
-  //       const response = await database.createDocument(
-  //         DATABASE_ID,
-  //         COLLECTION_ID,
-  //         uniqueId,
-  //         documentData
-  //       );
-
-  //       console.log("Document created:", response);
-  //       alert("Flag submitted successfully!");
-  //       setFlag(""); 
-  //     } else {
-  //       alert("Incorrect flag. Try again!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting flag:", error);
-  //     setError("An error occurred while submitting the flag.");
-  //   }
+  
+    // Normalize the flags by trimming and converting to lowercase (if case insensitive validation is required)
+    const normalizedFlag = flag.trim().toLowerCase();
+    const correctFlag = currentRound.flag.trim().toLowerCase();
+  
+    if (normalizedFlag === correctFlag) {
+      try {
+        // Prepare the submission document
+        const documentData = {
+          round_id: currentRound.id,
+          round_name: currentRound.name,
+          points_awarded: currentRound.points,
+          team_name: user?.name, // Assuming user has 'name' field in AuthContext
+          timestamp: new Date().toISOString(),
+        };
+  
+        // Create a new document in the database
+        const response = await database.createDocument(
+          DATABASE_ID,
+          COLLECTION_ID,
+          uniqueId(), // Generates a unique ID for the document
+          documentData
+        );
+  
+        console.log("Document created:", response);
+        setNotification({
+          message: `Correct! You earned ${currentRound.points} points.`,
+          type: "success",
+        });
+        setFlag(""); // Clear the flag input
+      } catch (error) {
+        console.error("Error submitting flag:", error);
+        setNotification({
+          message: "An error occurred while submitting the flag. Please try again.",
+          type: "error",
+        });
+      }
+    } else {
+      setNotification({
+        message: "Incorrect flag. Please try again!",
+        type: "error",
+      });
+    }
   };
 
-  if (!currentRound) {
-    return <div>Loading...</div>;
-  }
+  const clearNotification = () => setNotification(null);
+
+  if (!currentRound) return <div>Loading...</div>;
 
   return (
     <div className="relative flex flex-col items-center min-h-screen overflow-hidden text-white bg-gray-900">
-      {/* Animated Background (Bouncing Circles) */}
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="animate-bounce bg-yellow-500 opacity-40 rounded-full w-[500px] h-[500px] blur-3xl absolute top-10 left-20"></div>
         <div className="animate-bounce bg-orange-600 opacity-40 rounded-full w-[600px] h-[600px] blur-3xl absolute bottom-10 right-20"></div>
@@ -69,21 +82,12 @@ function Round() {
 
       {/* Content */}
       <div className="container relative z-10 p-5 mx-auto">
-        {/* Section Header with Text Animation */}
         <h1 className="mb-6 text-4xl font-bold text-center text-orange-700 animate-pulse">
           {currentRound.name} Challenge - Pokémon CTF
         </h1>
-
-        {/* Question Text with Animation */}
         <p className="container mb-6 text-lg text-center text-white animate-pulse">
-          Welcome to the {currentRound.name} Challenge! Your task is to uncover
-          the hidden flag in the given image. Analyze the image for hidden
-          clues, check metadata, or use steganography techniques. Once you find
-          the correct flag, enter it below to score{" "}
-          <strong>{currentRound.points} points</strong>. Good luck, Trainer!
+          Welcome to the {currentRound.name} Challenge! Analyze the given image for clues and submit the correct flag to score <strong>{currentRound.points} points</strong>.
         </p>
-
-        {/* Fixed Image (No Animation) */}
         <div className="mb-6">
           <img
             src={currentRound.challengeImg}
@@ -91,11 +95,9 @@ function Round() {
             className="max-w-xs mx-auto rounded-lg shadow-lg sm:max-w-md"
           />
         </div>
-
-        {/* Resource Download Section */}
         <div className="mb-8 text-center">
           <a
-            href={currentRound.challengeImg} // Link to image
+            href={currentRound.challengeImg}
             download
             className="px-4 py-2 text-white transition-transform bg-pink-500 rounded-lg hover:bg-pink-600 hover:scale-105"
           >
@@ -104,15 +106,9 @@ function Round() {
         </div>
 
         {/* Flag Submission Form */}
-        <form
-          onSubmit={handleFlagSubmit}
-          className="flex flex-col items-center"
-        >
+        <form onSubmit={handleFlagSubmit} className="flex flex-col items-center">
           <div className="w-full max-w-md mb-4">
-            <label
-              htmlFor="flag"
-              className="block mb-2 text-lg font-bold text-orange-700"
-            >
+            <label htmlFor="flag" className="block mb-2 text-lg font-bold text-orange-700">
               Enter the Flag:
             </label>
             <input
@@ -132,13 +128,15 @@ function Round() {
           </button>
         </form>
 
-        {/* Points Display */}
-        <div className="mt-6 text-lg text-center text-orange-700 animate-pulse">
-          <span className="font-bold">Points:</span> {score}
-        </div>
-
-        {/* Error Message */}
-        {error && <div className="mt-4 text-center text-red-500">{error}</div>}
+        {/* Notification */}
+        {notification && (
+          <div
+            className={`mt-4 text-center px-4 py-2 rounded-lg ${notification.type === "success" ? "bg-green-500" : "bg-red-500"}`}
+            onClick={clearNotification}
+          >
+            {notification.message}
+          </div>
+        )}
       </div>
     </div>
   );

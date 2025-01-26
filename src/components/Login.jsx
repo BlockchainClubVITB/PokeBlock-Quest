@@ -52,7 +52,7 @@ const Login = () => {
             className="text-sm font-semibold mb-6 text-white text-center"
             style={{ fontFamily: "Cinzel, serif" }}
           >
-            Please Login to your accoount{" "}
+            Please Login to your account{" "}
           </h1>
           <form ref={loginForm} onSubmit={handleSubmit} className="space-y-4">
             <div>
