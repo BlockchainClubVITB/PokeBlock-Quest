@@ -3,14 +3,15 @@ import ReactLoading from "react-loading";
 import { account } from "../utils/Config";
 import { createBrowserHistory } from "history";
 
+// Create contexts
 export const ErrorContext = createContext();
-const AuthContext = createContext();
+export const AuthContext = createContext();
+
 const history = createBrowserHistory();
 
 export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
-  const [user, setuser] = useState(false);
-
+  const [user, setUser] = useState(null); // Set initial value as null
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -20,26 +21,22 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (userInfo) => {
     try {
       setLoading(true);
-
-      let response = await account.createEmailPasswordSession(
-        userInfo.email,
-        userInfo.password
-      );
+      let response = await account.createEmailPasswordSession(userInfo.email, userInfo.password);
       let accountDetails = await account.get();
       console.log("accountDetails: ", accountDetails);
-      setuser(accountDetails);
+      setUser(accountDetails); // Correctly set user data
       setLoading(false);
     } catch (error) {
-      console.log(error.message); // alert the user
+      console.log(error.message);
       setErrorMessage(error.message);
-      history.push("/login"); // redirect to login page
+      history.push("/login");
       setLoading(false);
     }
   };
 
   const logoutUser = () => {
     account.deleteSession("current");
-    setuser(null);
+    setUser(null);
   };
 
   const registerUser = () => {};
@@ -47,11 +44,10 @@ export const AuthProvider = ({ children }) => {
   const checkUserStatus = async () => {
     try {
       let accountDetails = await account.get();
-      setuser(accountDetails);
+      setUser(accountDetails);
     } catch (error) {
       console.error(error);
     }
-
     setLoading(false);
   };
 
@@ -74,12 +70,7 @@ export const AuthProvider = ({ children }) => {
               height: "100vh",
             }}
           >
-            <ReactLoading
-              type={"spin"}
-              color={"#ed8936"}
-              height={"10%"}
-              width={"10%"}
-            />
+            <ReactLoading type={"spin"} color={"#ed8936"} height={"10%"} width={"10%"} />
           </div>
         ) : (
           children
@@ -89,6 +80,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Custom hooks for using the contexts
 export const useAuth = () => {
   return useContext(AuthContext);
 };
@@ -96,5 +88,3 @@ export const useAuth = () => {
 export const useError = () => {
   return useContext(ErrorContext);
 };
-
-export default AuthContext;
