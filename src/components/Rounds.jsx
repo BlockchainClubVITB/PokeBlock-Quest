@@ -9,6 +9,7 @@ function Rounds() {
   const navigate = useNavigate();
   const roundData = RoundsData();
   const [score, setScore] = useState(0);
+  const [completedRounds, setCompletedRounds] = useState([]);
 
   const DATABASE_ID = "6749aaef0034b73295d6";
   const COLLECTION_ID = "679656b300020ec3e00b";
@@ -26,9 +27,11 @@ function Rounds() {
             0
           );
           setScore(totalScore);
+          const completedRoundIds = documents.map(doc => doc.round_id);
+          setCompletedRounds(completedRoundIds);
         })
         .catch((error) => {
-          console.error("Error fetching score:", error);
+          console.error("Error fetching data:", error);
         });
     }
   }, [user]);
@@ -45,7 +48,7 @@ function Rounds() {
             <div className=" bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md shadow-lg flex items-center gap-2">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/9414/9414696.png"
-                className="w-8 h-8"
+                className="w-6 h-6"
                 alt="score icon"
               />
               <span>{score}</span>
@@ -73,8 +76,12 @@ function Rounds() {
           {roundData.map((card) => (
             <div
               key={card.id}
-              className="flex flex-col bg-white shadow-lg border border-slate-200 rounded-lg my-6 w-52 group"
+              className={`relative flex flex-col bg-white shadow-lg border border-slate-200 rounded-lg my-6 w-52 group 
+                          ${completedRounds.includes(card.id) ? 'overflow-hidden' : ''}`}
             >
+              {completedRounds.includes(card.id) && (
+                <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,120,0,0.2)_10px,rgba(255,120,0,0.2)_20px)] z-10" />
+              )}
               <div className="m-2.5 overflow-hidden rounded-md h-44 flex justify-center items-center">
                 <img
                   className="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
@@ -96,7 +103,8 @@ function Rounds() {
               <div className="flex justify-center p-6 pt-2 gap-7">
                 <button
                   type="button"
-                  className="bg-orange-700 text-white rounded-md px-4 py-2 my-2 transition-colors shadow-lg hover:bg-orange-800 font-medium"
+                  className={`bg-orange-700 text-white rounded-md px-4 py-2 my-2 transition-colors shadow-lg hover:bg-orange-800 font-medium
+                             ${completedRounds.includes(card.id) ? 'opacity-75' : ''}`}
                   style={{ fontFamily: "Cinzel, serif" }}
                   onClick={() => handleRoundClick(card)}
                 >
