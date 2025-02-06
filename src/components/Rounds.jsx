@@ -93,8 +93,14 @@ function Rounds() {
                 <h4 className="mb-1 text-xl font-semibold text-slate-800">
                   {card.name}
                 </h4>
-                <p className="text-sm font-semibold text-slate-500 uppercase">
-                  Points: {card.points}
+                <p className="text-lg font-semibold text-slate-500 uppercase flex items-center justify-center gap-2">
+                  <img 
+                    src="https://cdn-icons-png.flaticon.com/512/9414/9414696.png" 
+                    alt="points" 
+                    className="w-6 h-6"
+                  />
+                  {card.points}
+                  
                 </p>
                 <p className="text-sm font-semibold text-slate-500 uppercase">
                   Difficulty: {card.difficulty}
