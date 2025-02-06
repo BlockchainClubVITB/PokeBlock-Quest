@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { database, uniqueId } from "../utils/Config";
+import toast, { Toaster } from "react-hot-toast";
+import { database, uniqueId, Query } from "../utils/Config";
 import RoundsData from "./RoundsData";
 import { useAuth } from "../context/AuthContext"; // Correctly importing the custom hook
 
@@ -9,7 +10,6 @@ function Round() {
   const { id } = useParams();
   const { user } = useAuth(); // Use the custom hook to fetch user details
   const [flag, setFlag] = useState("");
-  const [notification, setNotification] = useState(null);
 
   const DATABASE_ID = "6749aaef0034b73295d6";
   const COLLECTION_ID = "679656b300020ec3e00b";
@@ -23,57 +23,74 @@ function Round() {
 
   const handleFlagSubmit = async (e) => {
     e.preventDefault();
-  
-    // Normalize the flags by trimming and converting to lowercase (if case insensitive validation is required)
-    const normalizedFlag = flag.trim().toLowerCase();
-    const correctFlag = currentRound.flag.trim().toLowerCase();
-  
-    if (normalizedFlag === correctFlag) {
-      try {
-        // Prepare the submission document
-        const documentData = {
-          round_id: currentRound.id,
-          round_name: currentRound.name,
-          points_awarded: currentRound.points,
-          team_name: user?.name, // Assuming user has 'name' field in AuthContext
-          timestamp: new Date().toISOString(),
-        };
-  
-        // Create a new document in the database
-        const response = await database.createDocument(
-          DATABASE_ID,
-          COLLECTION_ID,
-          uniqueId(), // Generates a unique ID for the document
-          documentData
+
+    try {
+      // Check if a submission already exists for this round and team
+      const existingSubmissions = await database.listDocuments(
+        DATABASE_ID,
+        COLLECTION_ID,
+        [
+          Query.equal("round_id", currentRound.id),
+          Query.equal("team_name", user?.name)
+        ]
+      );
+      console.log(existingSubmissions.total);
+      if (existingSubmissions && existingSubmissions.total > 0) {
+        toast.success(
+          "Your Team member has successfully submitted the answer. You can proceed with the next round.", {
+            position: "top-right"
+          }
         );
-  
-        console.log("Document created:", response);
-        setNotification({
-          message: `Correct! You earned ${currentRound.points} points.`,
-          type: "success",
-        });
-        setFlag(""); // Clear the flag input
-      } catch (error) {
-        console.error("Error submitting flag:", error);
-        setNotification({
-          message: "An error occurred while submitting the flag. Please try again.",
-          type: "error",
-        });
+        return;
       }
-    } else {
-      setNotification({
-        message: "Incorrect flag. Please try again!",
-        type: "error",
+
+      const normalizedFlag = flag.trim().toLowerCase();
+      const correctFlag = currentRound.flag.trim().toLowerCase();
+
+      if (normalizedFlag !== correctFlag) {
+        toast.error("Incorrect flag. Please try again!", {
+          position: "top-right"
+        });
+        return;
+      }
+
+      // If the answer is correct, prepare the submission document
+      const documentData = {
+        round_id: currentRound.id,
+        round_name: currentRound.name,
+        points_awarded: currentRound.points,
+        team_name: user?.name,
+        timestamp: new Date().toISOString()
+      };
+
+      // Submit the correct answer by creating a document in the database
+      const response = await database.createDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        uniqueId(),
+        documentData
+      );
+
+      console.log("Document created:", response);
+      toast.success(`Correct! You earned ${currentRound.points} points.`, {
+        position: "top-right"
       });
+      setFlag(""); // Clear the flag input
+    } catch (error) {
+      console.error("Error submitting flag:", error);
+      toast.error(
+        "An error occurred while submitting the flag. Please try again.", {
+          position: "top-right"
+        }
+      );
     }
   };
-
-  const clearNotification = () => setNotification(null);
 
   if (!currentRound) return <div>Loading...</div>;
 
   return (
-    <div className="relative flex flex-col items-center min-h-screen overflow-hidden text-white bg-gray-900">
+    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden text-white bg-gray-900">
+      <Toaster />
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="animate-bounce bg-yellow-500 opacity-40 rounded-full w-[500px] h-[500px] blur-3xl absolute top-10 left-20"></div>
@@ -81,18 +98,18 @@ function Round() {
       </div>
 
       {/* Content */}
-      <div className="container relative z-10 p-5 mx-auto">
+      <div className="container relative z-10 p-5 mx-auto flex flex-col items-center">
         <h1 className="mb-6 text-4xl font-bold text-center text-orange-700 animate-pulse">
           {currentRound.name} Challenge - Pokémon CTF
         </h1>
         <p className="container mb-6 text-lg text-center text-white animate-pulse">
           Welcome to the {currentRound.name} Challenge! Analyze the given image for clues and submit the correct flag to score <strong>{currentRound.points} points</strong>.
         </p>
-        <div className="mb-6">
+        <div className="mb-6 flex justify-center">
           <img
             src={currentRound.challengeImg}
             alt="CTF Challenge"
-            className="max-w-xs mx-auto rounded-lg shadow-lg sm:max-w-md"
+            className="max-w-xs rounded-lg shadow-lg sm:max-w-md"
           />
         </div>
         <div className="mb-8 text-center">
@@ -106,8 +123,8 @@ function Round() {
         </div>
 
         {/* Flag Submission Form */}
-        <form onSubmit={handleFlagSubmit} className="flex flex-col items-center">
-          <div className="w-full max-w-md mb-4">
+        <form onSubmit={handleFlagSubmit} className="flex flex-col items-center w-full">
+          <div className="w-full max-w-md mb-4 flex flex-col items-center">
             <label htmlFor="flag" className="block mb-2 text-lg font-bold text-orange-700">
               Enter the Flag:
             </label>
@@ -127,16 +144,6 @@ function Round() {
             Submit Flag
           </button>
         </form>
-
-        {/* Notification */}
-        {notification && (
-          <div
-            className={`mt-4 text-center px-4 py-2 rounded-lg ${notification.type === "success" ? "bg-green-500" : "bg-red-500"}`}
-            onClick={clearNotification}
-          >
-            {notification.message}
-          </div>
-        )}
       </div>
     </div>
   );
