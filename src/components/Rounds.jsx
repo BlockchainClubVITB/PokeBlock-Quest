@@ -89,8 +89,9 @@ function Rounds() {
                   alt="profile"
                 />
               </div>
-              <div className="p-6 text-center">
-                <h4 className="mb-1 text-xl font-semibold text-slate-800">
+              
+              <div className="p-6 text-center space-y-4">
+                <h4 className="text-xl font-semibold text-slate-800"  style={{ fontFamily: "Cinzel, serif" }}>
                   {card.name}
                 </h4>
                 <p className="text-lg font-semibold text-slate-500 uppercase flex items-center justify-center gap-2">
@@ -100,11 +101,35 @@ function Rounds() {
                     className="w-6 h-6"
                   />
                   {card.points}
-                  
                 </p>
-                <p className="text-sm font-semibold text-slate-500 uppercase">
-                  Difficulty: {card.difficulty}
+                 <p className="text-sm font-semibold uppercase flex items-center justify-center gap-2">
+                  <span 
+                    className={`
+                      px-4 py-1.5 rounded-full text-white
+                      flex items-center gap-1.5
+                      transform transition-all duration-300 hover:scale-105
+                      shadow-lg hover:shadow-xl
+                      ${card.difficulty.toLowerCase() === 'easy' 
+                        ? 'bg-gradient-to-r from-green-400 to-green-500 ring-1 ring-green-400/50' 
+                        : card.difficulty.toLowerCase() === 'medium'
+                        ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 ring-1 ring-yellow-400/50'
+                        : 'bg-gradient-to-r from-red-400 to-red-500 ring-1 ring-red-400/50'
+                      }
+                    `}
+                  >
+                    <svg 
+                      className="w-4 h-4" 
+                      fill="currentColor" 
+                      viewBox="0 0 20 20"
+                    >
+                      <path 
+                        d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                      />
+                    </svg>
+                    {card.difficulty}
+                  </span>
                 </p>
+              
               </div>
               <div className="flex justify-center p-6 pt-2 gap-7">
                 <button
