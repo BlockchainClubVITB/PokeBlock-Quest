@@ -14,6 +14,7 @@ const RoundsData = () => [
       "https://images.squarespace-cdn.com/content/v1/571645b440261d0e2095da20/1551387712835-7VQ55YVY8JB03IOHE9EK/eevee.jpg?format=1000w",
     challengeImg: EEVEE,
     flag: "blockchainclub{eevee_can_evolve}",
+    collectionId: import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID_ROUND1,
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const RoundsData = () => [
     imgSrc: "https://pics.craiyon.com/2024-09-21/vsLtBy8ZTIe78FNEyrEinw.webp",
     challengeImg: CHARIZARD,
     flag: "blockchainclub{charizard_flies_high}",
+    collectionId: import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID_ROUND2,
   },
   {
     id: 3,
@@ -33,6 +35,7 @@ const RoundsData = () => [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR95Zogh4jHtEANPFAgu29xBRbix-ELU6mMXg&s",
     challengeImg: PIKACHU,
     flag: "blockchainclub{pikachu_is_electric}",
+    collectionId: import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID_ROUND3,
   },
   {
     id: 4,
@@ -43,6 +46,7 @@ const RoundsData = () => [
       "https://www.cnet.com/a/img/hub/2016/07/08/24fc9acf-bcc9-4b10-a1c2-7ab0bed13cbf/pokemon-gym.jpg",
     challengeImg: GYMBATTLE,
     flag: "blockchainclub{master_badge_awaits_you}",
+    collectionId: import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID_ROUND4,
   },
   {
     id: 5,
@@ -53,6 +57,7 @@ const RoundsData = () => [
       "https://imgcdn.stablediffusionweb.com/2024/3/15/1aa57cb3-0678-474e-b517-105ed8d288d8.jpg",
     challengeImg: POKEBALLS,
     flag: "blockchainclub{gotta_catch_em_all}",
+    collectionId: import.meta.env.VITE_APP_APPWRITE_COLLECTION_ID_ROUND5,
   },
 ];
 

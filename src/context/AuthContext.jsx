@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, createContext } from "react";
-import ReactLoading from "react-loading";
 import { account } from "../utils/Config";
 import { createBrowserHistory } from "history";
+import Loader from "../components";
 
 // Create contexts
 export const ErrorContext = createContext();
@@ -21,7 +21,10 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (userInfo) => {
     try {
       setLoading(true);
-      let response = await account.createEmailPasswordSession(userInfo.email, userInfo.password);
+      let response = await account.createEmailPasswordSession(
+        userInfo.email,
+        userInfo.password
+      );
       let accountDetails = await account.get();
       console.log("accountDetails: ", accountDetails);
       setUser(accountDetails); // Correctly set user data
@@ -61,20 +64,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={contextData}>
       <ErrorContext.Provider value={errorMessage}>
-        {loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <ReactLoading type={"spin"} color={"#ed8936"} height={"10%"} width={"10%"} />
-          </div>
-        ) : (
-          children
-        )}
+        {loading ? <Loader /> : children}
       </ErrorContext.Provider>
     </AuthContext.Provider>
   );
