@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, createContext } from "react";
 import { account } from "../utils/Config";
 import { createBrowserHistory } from "history";
-import Loader from "../components";
+import Loader from "../components/Loader";
 
 // Create contexts
 export const ErrorContext = createContext();

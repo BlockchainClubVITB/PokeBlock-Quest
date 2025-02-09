@@ -1,6 +1,6 @@
 import ReactLoading from "react-loading";
 
-export default function Loader() {
+const Loader = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <ReactLoading
@@ -10,5 +10,7 @@ export default function Loader() {
         width={"10%"}
       />
     </div>
-  );
+  )
 }
+
+export default Loader
