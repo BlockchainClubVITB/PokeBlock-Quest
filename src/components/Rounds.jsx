@@ -4,11 +4,14 @@ import { database, Query } from "../utils/Config";
 import RoundsData from "./RoundsData";
 import Hint from "./Hint";
 import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import RoundsData from "./RoundsData";
 
 function Rounds() {
   const { user, logoutUser } = useAuth();
   const navigate = useNavigate();
   const roundData = RoundsData();
+  const [showRules, setShowRules] = useState(false);
   const [score, setScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState([]);
 
@@ -42,43 +45,10 @@ function Rounds() {
   };
 
   return (
-    <div className="bg-zinc-950 text-white min-h-screen flex flex-col">
-      <div className="flex justify-end p-4 gap-4">
-        {user && (
-          <>
-            <button
-              onClick={() => window.location.href = 'https://live-leaderboard-ugq2.vercel.app/'}
-              className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md flex items-center gap-2 transition-shadow shadow-lg"
-            >
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/945/945678.png"
-          alt="leaderboard icon"
-          className="w-5 h-5"
-        />
-        <span>Leaderboard</span>
-      </button>
-            <div className=" bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md shadow-lg flex items-center gap-2">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/9414/9414696.png"
-                className="w-6 h-6"
-                alt="score icon"
-              />
-              <span>{score}</span>
-            </div>
-            <button
-              onClick={logoutUser}
-              className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md flex items-center gap-2 transition-shadow shadow-lg"
-            >
-              <img src="/logout.png" alt="logout" className="w-5 h-5" />
-              <span>Logout</span>
-            </button>
-          </>
-        )}
-      </div>
-
-      <div className="container mx-auto px-4">
+    <div className="bg-zinc-950 text-white flex flex-col justify-center items-center">
+      <div className="">
         <div
-          className="text-7xl text-orange-700 font-semibold text-center py-8"
+          className="text-7xl text-orange-700 font-semibold text-center pt-3"
           style={{ fontFamily: "Cinzel, serif" }}
         >
           Rounds
@@ -159,6 +129,26 @@ function Rounds() {
         </div>
       </div>
       <Hint/>
+      <div className="links--wrapper bg-black">
+        {user ? (
+          <>
+            <button
+              onClick={logoutUser}
+              className="inline-block cursor-pointer bg-orange-700 text-white px-4 py-2 transition-colors duration-300 border border-black no-underline hover:bg-white hover:text-black"
+              to="/"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link
+            className="inline-block cursor-pointer bg-black text-white px-4 py-2 transition-colors duration-300 border border-black no-underline hover:bg-white hover:text-black"
+            to="/"
+          >
+            Login
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
