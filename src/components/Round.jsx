@@ -80,23 +80,16 @@ function Round() {
         documentData
       );
 
-      console.log("Document created:", response);
-      toast.success(`Correct! You earned ${currentRound.points} points.`, {
-        position: "top-right"
-      });
-      setFlag(""); // Clear the flag input
-    } catch (error) {
-      console.error("Error submitting flag:", error);
-      toast.error(
-        "An error occurred while submitting the flag. Please try again.", {
-          position: "top-right"
-        }
-      );
-    }
-  };
-
-  const handleClose = () => {
-    navigate('/');
+  //       console.log("Document created:", response);
+  //       alert("Flag submitted successfully!");
+  //       setFlag(""); 
+  //     } else {
+  //       alert("Incorrect flag. Try again!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting flag:", error);
+  //     setError("An error occurred while submitting the flag.");
+  //   }
   };
 
   if (!currentRound) return <div>Loading...</div>;
