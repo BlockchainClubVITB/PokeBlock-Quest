@@ -26,33 +26,33 @@ function Round() {
   const handleFlagSubmit = async (e) => {
     e.preventDefault();
 
-  //   try {
-  //     if (flag === currentRound.flag) {
-  //       setScore(score + currentRound.points);
+    try {
+      if (flag === currentRound.flag) {
+        setScore(score + currentRound.points);
 
-  //       const documentData = {
-  //         question: `What is the flag for ${currentRound.name} Challenge?`,
-  //         answer: flag,
-  //         points: score + currentRound.points,
-  //       };
+        const documentData = {
+          question: `What is the flag for ${currentRound.name} Challenge?`,
+          answer: flag,
+          points: score + currentRound.points,
+        };
 
-  //       const response = await database.createDocument(
-  //         DATABASE_ID,
-  //         COLLECTION_ID,
-  //         uniqueId,
-  //         documentData
-  //       );
+        const response = await database.createDocument(
+          DATABASE_ID,
+          COLLECTION_ID,
+          uniqueId,
+          documentData
+        );
 
-  //       console.log("Document created:", response);
-  //       alert("Flag submitted successfully!");
-  //       setFlag(""); 
-  //     } else {
-  //       alert("Incorrect flag. Try again!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting flag:", error);
-  //     setError("An error occurred while submitting the flag.");
-  //   }
+        console.log("Document created:", response);
+        alert("Flag submitted successfully!");
+        setFlag(""); 
+      } else {
+        alert("Incorrect flag. Try again!");
+      }
+    } catch (error) {
+      console.error("Error submitting flag:", error);
+      setError("An error occurred while submitting the flag.");
+    }
   };
 
   if (!currentRound) {
