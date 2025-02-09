@@ -6,14 +6,14 @@ const Hint = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-5 right-5 flex flex-col items-end z-50">
+    <div className="fixed bottom-5 right-5 flex flex-col items-end z-50 animate-bonus">
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 200 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center animate-bounce"
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center "
         >
           <div className="bg-white p-6 rounded-2xl shadow-lg w-96 max-h-[80vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-3 text-black">Rules & Guidelines</h2>
