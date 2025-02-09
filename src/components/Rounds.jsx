@@ -45,6 +45,17 @@ function Rounds() {
       <div className="flex justify-end p-4 gap-4">
         {user && (
           <>
+            <button
+              onClick={() => window.location.href = 'https://live-leaderboard-ugq2.vercel.app/'}
+              className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md flex items-center gap-2 transition-shadow shadow-lg"
+            >
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/945/945678.png"
+          alt="leaderboard icon"
+          className="w-5 h-5"
+        />
+        <span>Leaderboard</span>
+      </button>
             <div className=" bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md shadow-lg flex items-center gap-2">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/9414/9414696.png"
