@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // Add useNavigate
+import { useNavigate, useParams } from "react-router-dom"; // Correct import
 import toast, { Toaster } from "react-hot-toast";
 import { database, uniqueId, Query } from "../utils/Config";
 import RoundsData from "./RoundsData";
 import RoundHint from "./RoundHint";
-import { useAuth } from "../context/AuthContext"; // Correctly importing the custom hook
+import { useAuth } from "../context/AuthContext"; // Correct hook import
 
 function Round() {
-  const navigate = useNavigate(); // Add this hook
-  const [currentRound, setCurrentRound] = useState(null);
+  const navigate = useNavigate(); 
   const { id } = useParams();
-  const { user } = useAuth(); // Use the custom hook to fetch user details
+  const { user } = useAuth(); 
+  const [currentRound, setCurrentRound] = useState(null);
   const [flag, setFlag] = useState("");
 
   const DATABASE_ID = "6749aaef0034b73295d6";
@@ -19,37 +19,34 @@ function Round() {
   useEffect(() => {
     if (!id) return;
     const rounds = RoundsData();
-    const round = rounds.find((round) => round.id === parseInt(id));
+    const round = rounds.find((round) => round.id === Number(id)); // Ensure ID is converted to number
     setCurrentRound(round);
   }, [id]);
 
   const handleFlagSubmit = async (e) => {
     e.preventDefault();
 
-    
     if (!flag.trim()) {
       toast.error("Please enter a flag before submitting!", {
-        position: "top-right"
+        position: "top-right",
       });
       return;
     }
 
     try {
-      
       const existingSubmissions = await database.listDocuments(
         DATABASE_ID,
         COLLECTION_ID,
         [
           Query.equal("round_id", currentRound.id),
-          Query.equal("team_name", user?.name)
+          Query.equal("team_name", user?.name),
         ]
       );
-      console.log(existingSubmissions.total);
+
       if (existingSubmissions && existingSubmissions.total > 0) {
         toast.success(
-          "Your Team member has successfully submitted the answer. You can proceed with the next round.", {
-            position: "top-right"
-          }
+          "Your Team member has successfully submitted the answer. You can proceed with the next round.",
+          { position: "top-right" }
         );
         return;
       }
@@ -59,38 +56,40 @@ function Round() {
 
       if (normalizedFlag !== correctFlag) {
         toast.error("Incorrect flag. Please try again!", {
-          position: "top-right"
+          position: "top-right",
         });
         return;
       }
 
-      
       const documentData = {
         round_id: currentRound.id,
         round_name: currentRound.name,
         points_awarded: currentRound.points,
         team_name: user?.name,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
-      
-      const response = await database.createDocument(
+      await database.createDocument(
         DATABASE_ID,
         COLLECTION_ID,
         uniqueId(),
         documentData
       );
 
-  //       console.log("Document created:", response);
-  //       alert("Flag submitted successfully!");
-  //       setFlag(""); 
-  //     } else {
-  //       alert("Incorrect flag. Try again!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting flag:", error);
-  //     setError("An error occurred while submitting the flag.");
-  //   }
+      toast.success("Flag submitted successfully!", {
+        position: "top-right",
+      });
+
+      setFlag(""); // Clear the flag input after submission
+    } catch (error) {
+      console.error("Error submitting flag:", error);
+      toast.error("An error occurred while submitting the flag.");
+    }
+  };
+
+  // Close button function
+  const handleClose = () => {
+    navigate("/"); // Redirect to home or previous page
   };
 
   if (!currentRound) return <div>Loading...</div>;
@@ -98,22 +97,22 @@ function Round() {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden text-white bg-gradient-to-br from-gray-900 to-gray-900">
       <Toaster />
-      
-      {/* Add Close Button */}
-      <button 
+
+      {/* Close Button */}
+      <button
         onClick={handleClose}
         className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-800 transition-colors duration-300 z-20"
       >
-        <svg 
-          className="w-6 h-6 text-gray-300 hover:text-white" 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className="w-6 h-6 text-gray-300 hover:text-white"
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth="2" 
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
@@ -125,7 +124,6 @@ function Round() {
         <div className="animate-pulse bg-pink-500 opacity-10 rounded-full w-[400px] h-[400px] blur-3xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      
       <div className="container relative z-10 p-5 mx-auto flex flex-col items-center">
         <h1 className="mb-8 text-5xl font-bold text-center text-orange-700 " style={{ fontFamily: "Cinzel, serif" }}>
           {currentRound.name} Challenge
@@ -149,7 +147,7 @@ function Round() {
             download
             className="inline-block px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
-            <img src='https://cdn-icons-png.flaticon.com/512/2926/2926214.png' alt="Download" className="w-6 h-6 inline-block mr-2 invert" />
+            <img src="https://cdn-icons-png.flaticon.com/512/2926/2926214.png" alt="Download" className="w-6 h-6 inline-block mr-2 invert" />
             Download Image
           </a>
         </div>
@@ -180,7 +178,7 @@ function Round() {
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
           >
-            {flag.trim() ? 'Submit Flag' : 'Enter Flag to Submit'}
+            {flag.trim() ? "Submit Flag" : "Enter Flag to Submit"}
           </button>
         </form>
       </div>
