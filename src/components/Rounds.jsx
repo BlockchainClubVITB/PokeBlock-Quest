@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { database, Query } from "../utils/Config";
 import RoundsData from "./RoundsData";
+import Hint from "./Hint";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import RoundsData from "./RoundsData";
@@ -127,6 +128,7 @@ function Rounds() {
           ))}
         </div>
       </div>
+      <Hint/>
       <div className="links--wrapper bg-black">
         {user ? (
           <>

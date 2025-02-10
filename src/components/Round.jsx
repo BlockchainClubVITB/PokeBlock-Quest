@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"; // Add useNavigate
 import toast, { Toaster } from "react-hot-toast";
 import { database, uniqueId, Query } from "../utils/Config";
 import RoundsData from "./RoundsData";
+import RoundHint from "./RoundHint";
 import { useAuth } from "../context/AuthContext"; // Correctly importing the custom hook
 
 function Round() {
@@ -136,7 +137,7 @@ function Round() {
             <span className="font-bold text-pink-400">{currentRound.points} points</span>.
           </p>
         </div>
-
+        <RoundHint round={id} />
         <div className="mb-8">
           <img
             src={currentRound.challengeImg}
