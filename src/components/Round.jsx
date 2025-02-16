@@ -18,6 +18,7 @@ function Round() {
   const { user } = useAuth();
   const [currentRound, setCurrentRound] = useState(null);
   const [flag, setFlag] = useState("");
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -26,8 +27,38 @@ function Round() {
     setCurrentRound(round);
   }, [id]);
 
+  useEffect(() => {
+    async function checkSubmission() {
+      if (!currentRound || !user) return;
+      try {
+        const existingSubmissions = await database.listDocuments(
+          DatabaseId,
+          CollectionId,
+          [
+            Query.equal("round_id", currentRound.id),
+            Query.equal("team_name", user?.name),
+          ]
+        );
+        if (existingSubmissions && existingSubmissions.total > 0) {
+          setAlreadySubmitted(true);
+        }
+      } catch (error) {
+        console.error("Error checking submission:", error);
+      }
+    }
+    checkSubmission();
+  }, [currentRound, user]);
+
   const handleFlagSubmit = async (e) => {
     e.preventDefault();
+
+    if (alreadySubmitted) {
+      toast.success(
+        "Your Team member has already submitted the answer.",
+        { position: "top-right" }
+      );
+      return;
+    }
 
     if (!flag.trim()) {
       toast.error("Please enter a flag before submitting!", {
@@ -37,23 +68,6 @@ function Round() {
     }
 
     try {
-      const existingSubmissions = await database.listDocuments(
-        DatabaseId,
-        CollectionId,
-        [
-          Query.equal("round_id", currentRound.id),
-          Query.equal("team_name", user?.name),
-        ]
-      );
-
-      if (existingSubmissions && existingSubmissions.total > 0) {
-        toast.success(
-          "Your Team member has successfully submitted the answer. You can proceed with the next round.",
-          { position: "top-right" }
-        );
-        return;
-      }
-
       const normalizedFlag = flag.trim().toLowerCase();
       const correctFlag = currentRound.flag.trim().toLowerCase();
 
@@ -84,6 +98,7 @@ function Round() {
       });
 
       setFlag("");
+      setAlreadySubmitted(true);
     } catch (error) {
       console.error("Error submitting flag:", error);
       toast.error("An error occurred while submitting the flag.");
@@ -167,39 +182,45 @@ function Round() {
             Download Image
           </a>
         </div>
-        <form onSubmit={handleFlagSubmit} className="w-full max-w-md">
-          <div className="mb-6">
-            <label
-              htmlFor="flag"
-              className="block mb-3 text-xl font-bold text-orange-400 text-center"
-            >
-              Enter the Flag
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="flag"
-                value={flag}
-                onChange={(e) => setFlag(e.target.value)}
-                placeholder="Enter your flag here..."
-                className="w-full px-4 py-3 text-gray-800 bg-white/90 backdrop-blur-sm border-2 border-orange-400/50 
-                           rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/50 
-                           transition-all duration-300"
-              />
-            </div>
+        {alreadySubmitted ? (
+          <div className="w-full max-w-md text-center text-xl font-bold text-green-500">
+            We have received your submission, move on to the next.
           </div>
-          <button
-            type="submit"
-            disabled={!flag.trim()}
-            className={`w-full px-4 py-2 text-white rounded transition-all duration-300 ${
-              flag.trim()
-                ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
-          >
-            {flag.trim() ? "Submit Flag" : "Enter Flag to Submit"}
-          </button>
-        </form>
+        ) : (
+          <form onSubmit={handleFlagSubmit} className="w-full max-w-md">
+            <div className="mb-6">
+              <label
+                htmlFor="flag"
+                className="block mb-3 text-xl font-bold text-orange-400 text-center"
+              >
+                Enter the Flag
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="flag"
+                  value={flag}
+                  onChange={(e) => setFlag(e.target.value)}
+                  placeholder="Enter your flag here..."
+                  className="w-full px-4 py-3 text-gray-800 bg-white/90 backdrop-blur-sm border-2 border-orange-400/50 
+                             rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/50 
+                             transition-all duration-300"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={!flag.trim()}
+              className={`w-full px-4 py-2 text-white rounded transition-all duration-300 ${
+                flag.trim()
+                  ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+            >
+              {flag.trim() ? "Submit Flag" : "Enter Flag to Submit"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
