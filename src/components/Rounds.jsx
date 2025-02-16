@@ -59,7 +59,7 @@ function Rounds() {
                 <button
                   onClick={() =>
                     (window.location.href =
-                      "https://live-leaderboard-ugq2.vercel.app/")
+                      "https://live-leaderboard-seven.vercel.app/")
                   }
                   className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded-md flex items-center gap-2 transition-shadow shadow-lg"
                 >
