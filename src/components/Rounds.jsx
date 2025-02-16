@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { database, Query } from "../utils/Config";
+import { database, Query,DatabaseId,CollectionId } from "../utils/Config";
 import Hint from "./Hint";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,11 @@ function Rounds() {
   const [score, setScore] = useState(0);
   const [completedRounds, setCompletedRounds] = useState([]);
 
-  const DATABASE_ID = "6749aaef0034b73295d6";
-  const COLLECTION_ID = "679656b300020ec3e00b";
 
   useEffect(() => {
     if (user) {
       database
-        .listDocuments(DATABASE_ID, COLLECTION_ID, [
+        .listDocuments(DatabaseId, CollectionId, [
           Query.equal("team_name", user?.name),
         ])
         .then((response) => {

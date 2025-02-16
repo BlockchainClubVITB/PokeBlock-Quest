@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // Correct import
+import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { database, uniqueId, Query } from "../utils/Config";
+import {
+  database,
+  uniqueId,
+  Query,
+  DatabaseId,
+  CollectionId,
+} from "../utils/Config";
 import RoundsData from "./RoundsData";
 import RoundHint from "./RoundHint";
-import { useAuth } from "../context/AuthContext"; // Correct hook import
+import { useAuth } from "../context/AuthContext";
 
 function Round() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { id } = useParams();
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [currentRound, setCurrentRound] = useState(null);
   const [flag, setFlag] = useState("");
-
-  const DATABASE_ID = "6749aaef0034b73295d6";
-  const COLLECTION_ID = "679656b300020ec3e00b";
 
   useEffect(() => {
     if (!id) return;
     const rounds = RoundsData();
-    const round = rounds.find((round) => round.id === Number(id)); // Ensure ID is converted to number
+    const round = rounds.find((round) => round.id === Number(id));
     setCurrentRound(round);
   }, [id]);
 
@@ -35,8 +38,8 @@ function Round() {
 
     try {
       const existingSubmissions = await database.listDocuments(
-        DATABASE_ID,
-        COLLECTION_ID,
+        DatabaseId,
+        CollectionId,
         [
           Query.equal("round_id", currentRound.id),
           Query.equal("team_name", user?.name),
@@ -70,8 +73,8 @@ function Round() {
       };
 
       await database.createDocument(
-        DATABASE_ID,
-        COLLECTION_ID,
+        DatabaseId,
+        CollectionId,
         uniqueId(),
         documentData
       );
@@ -80,16 +83,15 @@ function Round() {
         position: "top-right",
       });
 
-      setFlag(""); // Clear the flag input after submission
+      setFlag("");
     } catch (error) {
       console.error("Error submitting flag:", error);
       toast.error("An error occurred while submitting the flag.");
     }
   };
 
-  // Close button function
   const handleClose = () => {
-    navigate("/"); // Redirect to home or previous page
+    navigate("/");
   };
 
   if (!currentRound) return <div>Loading...</div>;
@@ -125,17 +127,27 @@ function Round() {
       </div>
 
       <div className="container relative z-10 p-5 mx-auto flex flex-col items-center">
-        <h1 className="mb-8 text-5xl font-bold text-center text-orange-700 " style={{ fontFamily: "Cinzel, serif" }}>
+        <h1
+          className="mb-8 text-5xl font-bold text-center text-orange-700 "
+          style={{ fontFamily: "Cinzel, serif" }}
+        >
           {currentRound.name} Challenge
         </h1>
         <div className="max-w-2xl mb-8">
           <p className="text-xl text-center text-gray-200 leading-relaxed">
-            Welcome to the <span className="font-semibold text-orange-400">{currentRound.name}</span> Challenge! 
-            Analyze the given image for clues and submit the correct flag to score{' '}
-            <span className="font-bold text-pink-400">{currentRound.points} points</span>.
+            Welcome to the{" "}
+            <span className="font-semibold text-orange-400">
+              {currentRound.name}
+            </span>{" "}
+            Challenge! Analyze the given image for clues and submit the correct
+            flag to score{" "}
+            <span className="font-bold text-pink-400">
+              {currentRound.points} points
+            </span>
+            .
           </p>
         </div>
-        <RoundHint round={id} />
+        <RoundHint currentRound={currentRound} />
         <div className="mb-8">
           <img
             src={currentRound.challengeImg}
@@ -147,13 +159,20 @@ function Round() {
             download
             className="inline-block px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
-            <img src="https://cdn-icons-png.flaticon.com/512/2926/2926214.png" alt="Download" className="w-6 h-6 inline-block mr-2 invert" />
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2926/2926214.png"
+              alt="Download"
+              className="w-6 h-6 inline-block mr-2 invert"
+            />
             Download Image
           </a>
         </div>
         <form onSubmit={handleFlagSubmit} className="w-full max-w-md">
           <div className="mb-6">
-            <label htmlFor="flag" className="block mb-3 text-xl font-bold text-orange-400 text-center">
+            <label
+              htmlFor="flag"
+              className="block mb-3 text-xl font-bold text-orange-400 text-center"
+            >
               Enter the Flag
             </label>
             <div className="relative">
@@ -173,9 +192,9 @@ function Round() {
             type="submit"
             disabled={!flag.trim()}
             className={`w-full px-4 py-2 text-white rounded transition-all duration-300 ${
-              flag.trim() 
-                ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' 
-                : 'bg-gray-400 cursor-not-allowed'
+              flag.trim()
+                ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                : "bg-gray-400 cursor-not-allowed"
             }`}
           >
             {flag.trim() ? "Submit Flag" : "Enter Flag to Submit"}
