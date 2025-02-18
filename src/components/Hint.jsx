@@ -6,96 +6,145 @@ const Hint = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-5 right-5 flex flex-col items-end z-50 animate-bonus">
+    <div className="fixed bottom-5 right-5 flex flex-col items-end z-50">
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ type: "spring", stiffness: 200 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center "
-        >
-          <div className="bg-white p-6 rounded-2xl shadow-lg w-96 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-3 text-black">Rules & Guidelines</h2>
-            <div className="text-sm text-gray-700 whitespace-pre-line">
-              <div>
-                <h3 className="font-bold">Rules & Guidelines: Pokeblock Quest CTF</h3>
-                <p>
-                  Welcome to Pokeblock Quest!
-                  Gear up, cyber-trainers! 🏆 Your mission is to capture hidden flags, solve thrilling cybersecurity puzzles, and collect Diamonds 💎 to become the ultimate Pokeblock champion. But beware—only those who follow the Trainer Code will reach the top. Read the rules, strategize wisely, and let the quest begin!
-                </p>
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+          
+          <div className="relative h-full flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl shadow-2xl 
+                          w-full max-w-2xl max-h-[85vh] overflow-hidden border border-gray-700">
+              {/* Header */}
+              <div className="p-6 border-b border-gray-700">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-orange-400 flex items-center gap-2">
+                    <IoMdInformationCircleOutline />
+                    Rules & Guidelines
+                  </h2>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 hover:bg-gray-700/50 rounded-full transition-colors"
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-400 hover:text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                
+           
               </div>
-              <div>
-                <h3 className="font-bold">Eligibility</h3>
-                <p>
-                  - Open to all trainers, whether you're a rookie Pikachu or a legendary Mewtwo of hacking.
-                  - Play solo or form a team—but choose your squad wisely!
-                  - No prior hacking experience needed. Just bring your problem-solving skills, curiosity, and a Poké-sized thirst for adventure.
-                  - All trainers must register and agree to the Cyber-Trainer Code of Conduct—we play fair and for fun!
-                </p>
+
+              {/* Content Area */}
+              <div className="p-6 overflow-y-auto max-h-[60vh] custom-scrollbar space-y-8">
+                {/* Welcome Section */}
+                <div className="space-y-6">
+                  <div className="bg-gray-800/50 p-4 rounded-xl">
+                    <h3 className="font-bold text-orange-300 mb-2">Welcome to Pokeblock Quest!</h3>
+                    <p className="text-sm leading-relaxed text-gray-200">
+                      Gear up, cyber-trainers! 🏆 Your mission is to capture hidden flags, solve thrilling cybersecurity puzzles, 
+                      and collect Diamonds 💎 to become the ultimate Pokeblock champion. But beware—only those who follow the 
+                      Trainer Code will reach the top!
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-800/50 p-4 rounded-xl">
+                    <h3 className="font-bold text-orange-300 mb-3">Diamonds & Points</h3>
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div className="bg-green-500/20 p-3 rounded-lg">
+                        <div className="font-bold text-green-400">Easy</div>
+                        <div className="text-xl flex items-center justify-center gap-2">
+                          30 <img src="/diamond.png" alt="diamond" className="w-5 h-5" />
+                        </div>
+                      </div>
+                      <div className="bg-orange-500/20 p-3 rounded-lg">
+                        <div className="font-bold text-orange-400">Medium</div>
+                        <div className="text-xl flex items-center justify-center gap-2">
+                          60 <img src="/diamond.png" alt="diamond" className="w-5 h-5" />
+                        </div>
+                      </div>
+                      <div className="bg-red-500/20 p-3 rounded-lg">
+                        <div className="font-bold text-red-400">Hard</div>
+                        <div className="text-xl flex items-center justify-center gap-2">
+                          100 <img src="/diamond.png" alt="diamond" className="w-5 h-5" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rules Section */}
+                <div className="space-y-6">
+                  <div className="bg-gray-800/50 p-4 rounded-xl">
+                    <h3 className="font-bold text-orange-300 mb-2">Eligibility</h3>
+                    <ul className="text-sm space-y-2 list-disc list-inside text-gray-200">
+                      <li>Open to all trainers, whether you're a rookie Pikachu or a legendary Mewtwo of hacking.</li>
+                      <li>Play solo or form a team—but choose your squad wisely!</li>
+                      <li>No prior hacking experience needed—just bring your problem-solving skills!</li>
+                      <li>All trainers must agree to the Cyber-Trainer Code of Conduct.</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-gray-800/50 p-4 rounded-xl">
+                    <h3 className="font-bold text-orange-300 mb-2">General Rules</h3>
+                    <ul className="text-sm space-y-2 list-disc list-inside text-gray-200">
+                      <li>Use of external tools is allowed unless stated otherwise in a challenge.</li>
+                      <li>Sharing flags = instant disqualification. Keep your discoveries within your team!</li>
+                      <li>Collaboration only within your team—seeking outside help is prohibited.</li>
+                      <li>No toxic behavior. Harassment or cheating will get you disqualified. 🚫</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Prohibited Section */}
+                <div className="bg-gray-800/50 p-4 rounded-xl">
+                  <h3 className="font-bold text-orange-300 mb-2">Prohibited Actions</h3>
+                  <ul className="text-sm space-y-2 list-disc list-inside text-gray-200">
+                    <li>No brute-forcing, DoS attacks, or trying to hack the CTF platform itself.</li>
+                    <li>No flag-sharing, plagiarism, or tampering with other teams' progress.</li>
+                    <li>No unauthorized scripts or automation tools that bypass challenges.</li>
+                    <li>Play fair and follow ethical white-hat hacking principles. 🎯</li>
+                  </ul>
+                </div>
+
+                {/* Tips Section */}
+                <div className="bg-gray-800/50 p-4 rounded-xl">
+                  <h3 className="font-bold text-orange-300 mb-2">Trainer Tips</h3>
+                  <ul className="text-sm space-y-2 list-disc list-inside text-gray-200">
+                    <li>Equip your Poké-Tools: CyberChef, Burp Suite, Wireshark 🛠️</li>
+                    <li>Divide tasks and strategize within your team for maximum efficiency.</li>
+                    <li>Think creatively—solutions are often hidden in plain sight 🔍</li>
+                    <li>Need help? Visit the Discord Help Channel (no flag-sharing!)</li>
+                  </ul>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold mt-4">General Rules</h3>
-                <p>
-                  - Use of external tools is allowed unless stated otherwise in a challenge. If it helps crack the puzzle, go for it!
-                  - Sharing flags = instant disqualification. Keep your discoveries within your team—no leaks, no snitching! 🚫
-                  - Collaboration only within your team—seeking outside help is like using a Master Ball on a Caterpie… just unnecessary and unfair.
-                  - No toxic behavior. Pokémon battles can get heated, but this is a friendly quest. Harassment, cheating, or unsportsmanlike behavior will get you Team Rocket-blasted out of the competition. 🚀💥
-                  - Only the one member of a team submits flags—so double-check before hitting that enter key!
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold mt-4">Prohibited Actions</h3>
-                <p>
-                  - Brute-forcing, DoS attacks, or trying to hack the CTF platform itself? Nope, that’s like using Explosion on your own Pokémon. Don’t do it.
-                  - No flag-sharing, plagiarism, or tampering with other teams’ progress. If we catch you, say goodbye to your Pokédex of Diamonds. 💎❌
-                  - No unauthorized scripts/tools that bypass challenges—this is a test of skill, not shortcuts!
-                  - Play fair, think smart, and follow ethical white-hat hacking principles—because no one likes a villain (unless you’re Giovanni, but even he plays by some rules).
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold mt-4">Diamonds & Challenges</h3>
-                <p>
-                  Your ultimate goal? Solve challenges, capture flags, and collect Diamonds!
-                  🟢 Easy: 30 Diamonds
-                  🟠 Medium: 60 Diamonds
-                  🔴 Hard: 100 Diamonds
-                  Each challenge is infused with Pokémon magic, from Cryptography and Web Exploitation to Reverse Engineering, Forensics, and OSINT. Sharpen your claws, test your trainer instincts, and prove your cyber-skills!
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold mt-4">Trainer Tips</h3>
-                <p>
-                  - Equip your Poké-Tools: CyberChef, Burp Suite, Wireshark, and others to boost your skills like X-Attack!
-                  - Divide tasks and strategize—your team is your squad, and teamwork wins battles.
-                  - Think like a legendary Pokémon—the solution is often hidden in plain sight. 🔍
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold mt-4">Support & Assistance</h3>
-                <p>
-                  - Stuck on a challenge? Visit the Discord Help Channel for hints (but no flag-sharing, of course!).
-                  - Stay respectful, fair, and in the spirit of adventure—only the best cyber-trainers will reach the top!
-                </p>
+
+              <div className="p-6 border-t border-gray-700">
+                <button
+                  className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl 
+                            font-semibold hover:from-orange-600 hover:to-red-600 transition-all duration-300 
+                            shadow-lg hover:shadow-orange-500/25"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Got it, Let's Play!
+                </button>
               </div>
             </div>
-            <button
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              onClick={() => setIsOpen(false)}
-            >
-              Close
-            </button>
           </div>
-        </motion.div>
+        </div>
       )}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="bg-blue-500 text-white p-3 rounded-full shadow-lg"
+      
+      <button
+        className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-full 
+                  shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:scale-105"
         onClick={() => setIsOpen(true)}
       >
         <IoMdInformationCircleOutline size={30} />
-      </motion.button>
+      </button>
     </div>
   );
 };
