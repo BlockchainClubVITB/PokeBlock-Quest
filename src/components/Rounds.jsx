@@ -61,15 +61,15 @@ function Rounds() {
             />
             <span className="text-sm md:text-base font-medium">{score}</span>
               </div>
-              
-              <button
+              {/* Commented the leaderboard button */}
+              {/* <button
             onClick={() => window.location.href = "https://leader-poke.vercel.app/"}
             className="bg-white/10 backdrop-blur-md text-white px-3 py-2 rounded-lg flex items-center gap-2 
                  hover:bg-white/20 transition-all duration-300"
               >
             <img src="/trophy-star.png" alt="leaderboard" className="w-5 h-5" />
             <span className="hidden md:inline">Leaderboard</span>
-              </button>
+              </button> */}
               
               <button
             onClick={logoutUser}
