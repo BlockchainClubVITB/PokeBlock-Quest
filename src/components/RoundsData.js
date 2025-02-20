@@ -1,20 +1,19 @@
-import EEVEE from "../assets/eevee.png"
-import CHARIZARD from "../assets/charizard.jpg"
-import PIKACHU from "../assets/pikachu.png"
-import GYMBATTLE from "../assets/gymBattle.png"
-import POKEBALLS from "../assets/pokeball.png"
-
+import EEVEE from "../assets/eevee.png";
+import CHARIZARD from "../assets/charizard.jpg";
+import PIKACHU from "../assets/pikachu.png";
+import GYMBATTLE from "../assets/gymBattle.png";
+import POKEBALLS from "../assets/pokeball.png";
 
 const RoundsData = () => [
   {
     id: 1,
     name: "ROUND 1",
-    points: 10,
+    points: 30,
     difficulty: "Easy",
-    // imgSrc: "https://picsum.photos/id/1025/200/200",  
+    // imgSrc: "https://picsum.photos/id/1025/200/200",
     // challengeImg: "https://picsum.photos/id/1025/600/400",
     // flag: "dummy_flag{test_eevee}",
-     hint: "🔍 EEVEE may evolve in many ways, but in this challenge, evolution lies in the details! Look closely at the image metadata, hidden text, or unusual patterns. Tools like CyberChef or ExifTool might help uncover secrets. Try checking for steganography, EXIF data, or encoded messages—the flag might be hiding in plain sight! 🚀✨",
+    hint: "🔍 EEVEE may evolve in many ways, but in this challenge, evolution lies in the details! Look closely at the image metadata, hidden text, or unusual patterns. Tools like CyberChef or ExifTool might help uncover secrets. Try checking for steganography, EXIF data, or encoded messages—the flag might be hiding in plain sight! 🚀✨",
     imgSrc:
       "https://images.squarespace-cdn.com/content/v1/571645b440261d0e2095da20/1551387712835-7VQ55YVY8JB03IOHE9EK/eevee.jpg?format=1000w",
     challengeImg: EEVEE,
@@ -23,7 +22,7 @@ const RoundsData = () => [
   {
     id: 2,
     name: "ROUND 2",
-    points: 20,
+    points: 30,
     difficulty: "Easy",
     // imgSrc: "https://picsum.photos/seed/test2/200",
     // challengeImg: "https://picsum.photos/seed/test2/200",
@@ -36,7 +35,7 @@ const RoundsData = () => [
   {
     id: 3,
     name: "ROUND 3",
-    points: 30,
+    points: 60,
     difficulty: "Medium",
     // imgSrc: "https://picsum.photos/seed/test3/250",
     // challengeImg: "https://picsum.photos/seed/test3/250",
@@ -50,7 +49,7 @@ const RoundsData = () => [
   {
     id: 4,
     name: "ROUND 4",
-    points: 40,
+    points: 60,
     difficulty: "Medium",
     // imgSrc: "https://picsum.photos/seed/test4/300",
     // challengeImg: "https://picsum.photos/seed/test4/300",
@@ -64,7 +63,7 @@ const RoundsData = () => [
   {
     id: 5,
     name: "ROUND 5",
-    points: 50,
+    points: 100,
     difficulty: "Hard",
     // imgSrc: "https://picsum.photos/seed/test5/350",
     // challengeImg: "https://picsum.photos/seed/test5/350",
